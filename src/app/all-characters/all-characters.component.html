@@ -1,0 +1,134 @@
+ 
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-lg-6">
+        </div>
+        <div class="col-lg-3">
+            <input class="form-control mr-sm-2" [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" type="text" required name='characterName' id='characterName'
+                placeholder="Digite o nome do personagem" aria-label="Search" (keyup)="findCharacter($event)">
+        </div>
+        <div class="col-lg-3">
+        </div>
+    </div>
+</div>
+  
+<div class="container-fluid mt-5" *ngIf="!showSearchResult">
+    <h4>Marvel Characters</h4>
+    <div class="row">
+        <div class="col-lg-3 mt-3 mb-3" *ngFor="let characters of allCharacters">
+            <div class="card">
+                <img src="{{characters.thumbnail.path +'/standard_medium.'+characters.thumbnail.extension}}"
+                    width="100%" class="card-img-top" alt="Some Issue Loading Image..." />
+                <div class="card-body">
+                    <h5 class="card-title">{{ characters.name }}</h5>
+                    <button type="button" (click)="fetchComicsByCharacter(characters.id)"
+                        class="btn btn-outline-primary  mr-4" data-toggle="modal"
+                        data-target="#modalComics">HQ's</button>
+                    <button type="button" (click)="fetchSeriesByCharacter(characters.id)"
+                        class="btn btn-outline-secondary" data-toggle="modal"
+                       data-target=".cd-example-modal-lg">Series</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+  
+<div class="container-fluid mt-5" *ngIf="showSearchResult">
+    <h4>Marvel Characters</h4>
+    <div class="row">
+        <div class="col-lg-3 mt-3 mb-3" *ngFor="let characters of searchedCharacter">
+            <div class="card">
+                <img src="{{characters.thumbnail.path +'/standard_medium.'+characters.thumbnail.extension}}"
+                    width="100%" class="card-img-top" alt="Some Issue Loading Image..." />
+                <div class="card-body">
+                    <h5 class="card-title">{{ characters.name }}</h5>
+                    <button type="button" (click)="fetchComicsByCharacter(characters.id)" 
+                        class="btn btn-outline-primary  mr-4" data-toggle="modal"
+                        data-target="#comics_content">HQ's</button>
+                    <button type="button" (click)="fetchSeriesByCharacter(characters.id)"
+                        class="btn btn-outline-secondary" data-toggle="modal"
+                        data-target=".cd-example-modal-lg">Series</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center">
+    <pagination-controls
+      (pageChange)="renderPage($event)"
+    ></pagination-controls>
+  </div>
+
+ <!-- The Comics Modal -->
+ <div class="modal" id="modalComics"  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">HQ's</h4>
+          <button type="button" class="btn-close" data-dismiss="modal" (click)="closeComicsModal()"></button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body ">
+            <div class="container">
+                <div class="row" *ngIf="showComicsDiv">
+                    <div class="col-lg-3 mt-3 mb-3" *ngFor="let c of comics">
+                        <div class="card">
+                            <img src="{{c.thumbnail.path +'/standard_medium.'+c.thumbnail.extension}}" width="100%"
+                                class="card-img-top" alt="Some Issue Loading Image..." />
+                            <div class="card-body">
+                                <h5 class="card-title">{{ c.title }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!showComicsDiv">
+                    <h4> No Comics For this Character </h4>
+                </div>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+
+<!-- The Series Modal -->
+<div class="modal" id="modalSeries"  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Series</h4>
+          <button type="button" class="btn-close" data-dismiss="modal" (click)="closeSeriesModal()"></button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body ">
+            <div class="container">
+                <div class="row" *ngIf="showSeriesDiv">
+                    <div class="col-lg-3 mt-3 mb-3" *ngFor="let c of series">
+                        <div class="card">
+                            <img src="{{c.thumbnail.path +'/standard_medium.'+c.thumbnail.extension}}" width="100%"
+                                class="card-img-top" alt="Some Issue Loading Image..." />
+                            <div class="card-body">
+                                <h5 class="card-title">{{ c.title }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!showSeriesDiv">
+                    <h4> No Series For this Character </h4>
+                </div>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+
